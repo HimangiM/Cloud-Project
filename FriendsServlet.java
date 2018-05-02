@@ -64,7 +64,7 @@ public class FriendsServlet extends HttpServlet {
                 Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/socialnetwork", "root", "");
                 
                 st2 = conn.createStatement();
-                rs2 = st2.executeQuery("select * from users where not firstName='"+uname+"' and not lastName='"+lname+"'");
+                rs2 = st2.executeQuery("select * from users where not firstName='"+uname+"' and not lastName='"+lname+"' and firstName not in (select friendTo from friends where friendFrom='"+uname+"')");
                 out.println("<form action = 'FriendsServlet'>");
                 while(rs2.next()){
                     out.println("<input type = 'radio' name = 'addFriend' value = '"+rs2.getString(2)+"'>" + rs2.getString(2) + "<br>");
