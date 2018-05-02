@@ -70,9 +70,18 @@ public class MainServlet extends HttpServlet {
                 }
                 //Welcome ends here
                 
+                // Retrieve Id
+                st4 = conn.createStatement();
+                rs4 = st4.executeQuery("select id from users where firstName='"+uname+"' and lastName='"+lname+"'");
+                while(rs4.next()){
+                    id1 = Integer.parseInt(rs4.getString(1));
+                    //out.println("User "+id1+"<br>");
+                }
+                // End retrieve
+                
                 //Add friend list
                 st2 = conn.createStatement();
-                rs2 = st2.executeQuery("select * from users where not firstName='"+uname+"' and not lastName='"+lname+"'");
+                rs2 = st2.executeQuery("select * from users where not firstName='"+uname+"' and not lastName='"+lname+"' and id not in (select friendTo from friends where friendFrom="+id1+")");
                 out.println("<form action = 'FriendsServlet'>");
                 while(rs2.next()){
                     out.println("<input type ='radio' name ='addFriend' value ='"+rs2.getString(2)+"'>" + rs2.getString(2) + "<br>");
@@ -82,13 +91,7 @@ public class MainServlet extends HttpServlet {
                 out.println("No friends to show!");
                 // End add friend
                 
-                // Retrieve Id
-//                st4 = conn.createStatement();
-//                rs4 = st4.executeQuery("select id from users where firstName='"+uname+"' and lastName='"+lname+"'");
-//                while(rs4.next()){
-//                    id1 = Integer.parseInt(rs4.getString(1));
-//                    out.println("User "+id1+"<br>");
-//                }
+                
 //                
 //                st5 = conn.createStatement();
 //                rs5 = st5.executeQuery("select id from users where firstName='"+friend+"'");
