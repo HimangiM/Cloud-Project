@@ -32,9 +32,9 @@ public class MainServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    String uname, lname, friend = null;
-    Statement st1, st2, st3, st4, st5, st6 = null;
-    ResultSet rs1, rs2, rs3, rs4, rs5 = null;
+    String uname, lname, friend, usname, lsname = null;
+    Statement st1, st2, st3, st4, st5, st6, st7 = null;
+    ResultSet rs1, rs2, rs3, rs4, rs5, rs7 = null;
     int id1, id2;
     PreparedStatement preparedStatement = null;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -54,15 +54,27 @@ public class MainServlet extends HttpServlet {
             
             uname = request.getParameter("uname");
             lname = request.getParameter("lname");
-            friend = request.getParameter("addFriend");
+            // friend = request.getParameter("addFriend");
             try{
                 // Welcome Page
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/socialnetwork", "root", "");
+                if (uname == null && lname == null){
+                    usname = request.getParameter("usname");
+                    lsname = request.getParameter("lsname");
+                    
+                    st7 = conn.createStatement();
+                    st7.executeUpdate("insert into users(firstName,lastName) values('"+usname+"','"+lsname+"')");
+                    
+                    uname = usname;
+                    lname = lsname;
+                }
+                              
                 HttpSession session = request.getSession();
                 session.setAttribute("fname", uname);
                 session.setAttribute("lname", lname);
-                // out.println(session.getAttribute("fname"));
-                Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/socialnetwork", "root", "");
+                // out.println(session.getAttribute("fname"));                
+                
                 st1 = conn.createStatement();
                 rs1 = st1.executeQuery("select * from users where firstName='"+uname+"' and lastName='"+lname+"'");
                 while(rs1.next()){
@@ -99,7 +111,7 @@ public class MainServlet extends HttpServlet {
 //                    id2 = Integer.parseInt(rs4.getString(1));
 //                    out.println("Friend "+id2+"<br>");
 //                }
-                //End of Retrieve Id
+               
                 
                 // Feed data
 //                preparedStatement = conn.prepareStatement("insert into friends(friendFrom,friendTo) values("+id1+","+id2+")");
