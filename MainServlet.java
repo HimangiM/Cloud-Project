@@ -60,7 +60,7 @@ public class MainServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("fname", uname);
                 session.setAttribute("lname", lname);
-                out.println(session.getAttribute("fname"));
+                // out.println(session.getAttribute("fname"));
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/socialnetwork", "root", "");
                 st1 = conn.createStatement();
@@ -75,7 +75,7 @@ public class MainServlet extends HttpServlet {
                 rs2 = st2.executeQuery("select * from users where not firstName='"+uname+"' and not lastName='"+lname+"'");
                 out.println("<form action = 'FriendsServlet'>");
                 while(rs2.next()){
-                    out.println("<input type = 'radio' name = 'addFriend' value = '"+rs2.getString(2)+"'>" + rs2.getString(2) + "<br>");
+                    out.println("<input type ='radio' name ='addFriend' value ='"+rs2.getString(2)+"'>" + rs2.getString(2) + "<br>");
                 }
                 out.println("<input type = 'submit' name =Submit' value='Add Friend'>");
                 out.println("</form>");
