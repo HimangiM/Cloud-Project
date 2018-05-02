@@ -53,11 +53,13 @@ public class FriendsServlet extends HttpServlet {
             out.println("</html>");
             
             friend = request.getParameter("addFriend");
+            // out.println(friend);
             try{
                 //Add friend list
                 HttpSession session = request.getSession(false);
                 uname = (String)session.getAttribute("fname");
                 lname = (String)session.getAttribute("lname");
+                out.println("Profile of " + uname + " " + lname);
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/socialnetwork", "root", "");
                 
@@ -76,25 +78,26 @@ public class FriendsServlet extends HttpServlet {
                 rs4 = st4.executeQuery("select id from users where firstName='"+uname+"' and lastName='"+lname+"'");
                 while(rs4.next()){
                     id1 = Integer.parseInt(rs4.getString(1));
-                    out.println("User "+id1+"<br>");
+                    // out.println("User "+id1+"<br>");
                 }
                 
                 st5 = conn.createStatement();
                 rs5 = st5.executeQuery("select id from users where firstName='"+friend+"'");
                 while(rs5.next()){
-                    id2 = Integer.parseInt(rs4.getString(1));
-                    out.println("Friend "+id2+"<br>");
+                    id2 = Integer.parseInt(rs5.getString(1));
+                    // out.println("Friend "+id2+"<br>");
                 }
                 //End of Retrieve Id
                 
                 // Feed data
                 preparedStatement = conn.prepareStatement("insert into friends(friendFrom,friendTo) values("+id1+","+id2+")");
                 int i = preparedStatement.executeUpdate();
-                out.println("<br>Friend added "+i+"<br>");
+                out.println("<br>Friend added");
                 // End of feed
                 
                            
                 // Show friends
+                out.println("<br>Friends<br>");
                 st3 = conn.createStatement();
                 rs3 = st3.executeQuery("select * from friends where friendFrom="+id1+"");
                 st7 = conn.createStatement();
