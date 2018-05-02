@@ -55,23 +55,14 @@ public class FriendsServlet extends HttpServlet {
             friend = request.getParameter("addFriend");
             // out.println(friend);
             try{
-                //Add friend list
+                // Connection, display message
                 HttpSession session = request.getSession(false);
                 uname = (String)session.getAttribute("fname");
                 lname = (String)session.getAttribute("lname");
                 out.println("Profile of " + uname + " " + lname);
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/socialnetwork", "root", "");
-                
-                st2 = conn.createStatement();
-                rs2 = st2.executeQuery("select * from users where not firstName='"+uname+"' and not lastName='"+lname+"' and firstName not in (select friendTo from friends where friendFrom='"+uname+"')");
-                out.println("<form action = 'FriendsServlet'>");
-                while(rs2.next()){
-                    out.println("<input type = 'radio' name = 'addFriend' value = '"+rs2.getString(2)+"'>" + rs2.getString(2) + "<br>");
-                }
-                out.println("<input type = 'submit' name = 'AddFriend' value='Add Friend'>");
-                out.println("</form>");
-                // End add friend
+                // end connections
                 
                 // Retrieve Id
                 st4 = conn.createStatement();
@@ -88,6 +79,19 @@ public class FriendsServlet extends HttpServlet {
                     // out.println("Friend "+id2+"<br>");
                 }
                 //End of Retrieve Id
+                
+                
+                st2 = conn.createStatement();
+                rs2 = st2.executeQuery("select * from users where not firstName='"+uname+"' and not lastName='"+lname+"' and id not in (select friendTo from friends where friendFrom="+id1+")");
+                out.println("<form action = 'FriendsServlet'>");
+                while(rs2.next()){
+                    out.println("<input type = 'radio' name = 'addFriend' value = '"+rs2.getString(2)+"'>" + rs2.getString(2) + "<br>");
+                }
+                out.println("<input type = 'submit' name = 'AddFriend' value='Add Friend'>");
+                out.println("</form>");
+                // End add friend
+                
+                
                 
                 // Feed data
                 preparedStatement = conn.prepareStatement("insert into friends(friendFrom,friendTo) values("+id1+","+id2+")");
