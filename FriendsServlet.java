@@ -80,6 +80,12 @@ public class FriendsServlet extends HttpServlet {
                 }
                 //End of Retrieve Id
                 
+                // Feed data
+                preparedStatement = conn.prepareStatement("insert into friends(friendFrom,friendTo) values("+id1+","+id2+")");
+                int i = preparedStatement.executeUpdate();
+                // out.println("<br>Friend added");
+                // End of feed
+                
                 
                 st2 = conn.createStatement();
                 rs2 = st2.executeQuery("select * from users where not firstName='"+uname+"' and not lastName='"+lname+"' and id not in (select friendTo from friends where friendFrom="+id1+")");
@@ -90,16 +96,7 @@ public class FriendsServlet extends HttpServlet {
                 out.println("<input type = 'submit' name = 'AddFriend' value='Add Friend'>");
                 out.println("</form>");
                 // End add friend
-                
-                
-                
-                // Feed data
-                preparedStatement = conn.prepareStatement("insert into friends(friendFrom,friendTo) values("+id1+","+id2+")");
-                int i = preparedStatement.executeUpdate();
-                out.println("<br>Friend added");
-                // End of feed
-                
-                           
+          
                 // Show friends
                 out.println("<br>Friends<br>");
                 st3 = conn.createStatement();
@@ -108,7 +105,7 @@ public class FriendsServlet extends HttpServlet {
                 while(rs3.next()){
                     rs6 = st7.executeQuery("select * from users where id="+rs3.getString(3));
                     while(rs6.next()){
-                        out.println(rs6.getString(2)+" "+rs6.getString(3)+"<br>");
+                        out.println(rs6.getString(2)+"<br>");
                     }
                 }                      
                 // End friends
