@@ -75,9 +75,9 @@ public class MainServlet extends HttpServlet {
                 rs2 = st2.executeQuery("select * from users where not firstName='"+uname+"' and not lastName='"+lname+"'");
                 out.println("<form action = 'FriendsServlet'>");
                 while(rs2.next()){
-                    out.println("<input type = 'radio' name = 'addFriend' value = '"+rs2.getString(1)+"'>" + rs2.getString(2) + "<br>");
+                    out.println("<input type = 'radio' name = 'addFriend' value = '"+rs2.getString(2)+"'>" + rs2.getString(2) + "<br>");
                 }
-                out.println("<input type = 'submit' name = 'AddFriend' value='Add Friend'>");
+                out.println("<input type = 'submit' name =Submit' value='Add Friend'>");
                 out.println("</form>");
                 out.println("No friends to show!");
                 // End add friend
