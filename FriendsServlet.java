@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -54,7 +55,9 @@ public class FriendsServlet extends HttpServlet {
             friend = request.getParameter("addFriend");
             try{
                 //Add friend list
-                
+                HttpSession session = request.getSession(false);
+                uname = (String)session.getAttribute("fname");
+                lname = (String)session.getAttribute("lname");
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/socialnetwork", "root", "");
                 
@@ -62,7 +65,7 @@ public class FriendsServlet extends HttpServlet {
                 rs2 = st2.executeQuery("select * from users where not firstName='"+uname+"' and not lastName='"+lname+"'");
                 out.println("<form action = 'FriendsServlet'>");
                 while(rs2.next()){
-                    out.println("<input type = 'radio' name = 'addFriend' value = '"+rs2.getString(1)+"'>" + rs2.getString(2) + "<br>");
+                    out.println("<input type = 'radio' name = 'addFriend' value = '"+rs2.getString(2)+"'>" + rs2.getString(2) + "<br>");
                 }
                 out.println("<input type = 'submit' name = 'AddFriend' value='Add Friend'>");
                 out.println("</form>");
