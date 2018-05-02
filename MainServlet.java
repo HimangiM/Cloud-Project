@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.servlet.ServletException;
@@ -32,9 +33,10 @@ public class MainServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     String uname, lname, friend = null;
-    Statement st1, st2, st3, st4, st5 = null;
+    Statement st1, st2, st3, st4, st5, st6 = null;
     ResultSet rs1, rs2, rs3, rs4, rs5 = null;
     int id1, id2;
+    PreparedStatement preparedStatement = null;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -58,9 +60,9 @@ public class MainServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("fname", uname);
                 session.setAttribute("lname", lname);
-                
+                out.println(session.getAttribute("fname"));
                 Class.forName("com.mysql.jdbc.Driver");
-                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/socialnetwork?", "root", "");
+                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/socialnetwork", "root", "");
                 st1 = conn.createStatement();
                 rs1 = st1.executeQuery("select * from users where firstName='"+uname+"' and lastName='"+lname+"'");
                 while(rs1.next()){
@@ -71,29 +73,45 @@ public class MainServlet extends HttpServlet {
                 //Add friend list
                 st2 = conn.createStatement();
                 rs2 = st2.executeQuery("select * from users where not firstName='"+uname+"' and not lastName='"+lname+"'");
-                out.println("<form action = 'MainServlet'>");
+                out.println("<form action = 'FriendsServlet'>");
                 while(rs2.next()){
                     out.println("<input type = 'radio' name = 'addFriend' value = '"+rs2.getString(1)+"'>" + rs2.getString(2) + "<br>");
                 }
                 out.println("<input type = 'submit' name = 'AddFriend' value='Add Friend'>");
                 out.println("</form>");
+                out.println("No friends to show!");
                 // End add friend
                 
                 // Retrieve Id
-                st4 = conn.createStatement();
-                rs4 = st4.executeQuery("select id from users where firstName='"+uname+"' and lastName='"+lname+"'");
-                while(rs4.next()){
-                    out.println(id1);
-                    id1 = Integer.parseInt(rs4.getString(1));
-                }
+//                st4 = conn.createStatement();
+//                rs4 = st4.executeQuery("select id from users where firstName='"+uname+"' and lastName='"+lname+"'");
+//                while(rs4.next()){
+//                    id1 = Integer.parseInt(rs4.getString(1));
+//                    out.println("User "+id1+"<br>");
+//                }
+//                
+//                st5 = conn.createStatement();
+//                rs5 = st5.executeQuery("select id from users where firstName='"+friend+"'");
+//                while(rs5.next()){
+//                    id2 = Integer.parseInt(rs4.getString(1));
+//                    out.println("Friend "+id2+"<br>");
+//                }
                 //End of Retrieve Id
                 
+                // Feed data
+//                preparedStatement = conn.prepareStatement("insert into friends(friendFrom,friendTo) values("+id1+","+id2+")");
+//                int i = preparedStatement.executeUpdate();
+//                out.println("<br>Friend added "+i+"<br>");
+                // End of feed
+                
+                
+                
                 // Show friends
-                st3 = conn.createStatement();
-                rs3 = st3.executeQuery("select * from friends where friendFrom="+id1+"");
-                while(rs3.next()){
-                    out.println(rs3.getString(3));
-                }                      
+//                st3 = conn.createStatement();
+//                rs3 = st3.executeQuery("select * from friends where friendFrom="+id1+"");
+//                while(rs3.next()){
+//                    out.println(rs3.getString(3));
+//                }                      
                 // End friends
             }catch(Exception e){
                 out.println("Login Failed"+e);
@@ -128,7 +146,7 @@ public class MainServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
     }
 
     /**
