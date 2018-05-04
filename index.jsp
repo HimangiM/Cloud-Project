@@ -9,7 +9,7 @@
         <form action = "MainServlet">
             <input type = "text" name = "uname"><br>
             <input type = "text" name = "lname"><br>
-            <input type = "submit" name = "Submit" value = "SignIn">
+            <input type = "submit" name = "Submit" value = "Join">
         </form>
     </body>
 </html>
