@@ -1,9 +1,3 @@
-<%-- 
-    Document   : index
-    Created on : May 2, 2018, 12:13:24 AM
-    Author     : himan
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
