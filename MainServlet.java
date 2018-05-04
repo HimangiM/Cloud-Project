@@ -68,9 +68,9 @@ public class InitialServlet extends HttpServlet {
 
                 // Check if user in database
                 st10 = conn.createStatement();
-                rs10 = st10.executeQuery("select * from users");
-                while(rs10.next()){
-                    //out.println("<script type='text/javascript'>alert('No user');</script>");
+                rs10 = st1.executeQuery("select * from users where firstName='"+uname+"' and lastName='"+lname+"'");
+                if(!rs10.next()){
+                    out.println("<script type='text/javascript'>alert('No user');</script>");
                     if (rs10.getString(1) == "uname" && rs10.getString(2) == "lname"){
                         flag = 1;
                     }
@@ -81,6 +81,7 @@ public class InitialServlet extends HttpServlet {
                 if (flag == 0){
                     preparedStatement = conn.prepareStatement("insert into users(firstName,lastName) values('"+uname+"','"+lname+"')");
                     int i = preparedStatement.executeUpdate();
+                    flag = 1;
                 }
                 // End of check
                 
@@ -130,7 +131,7 @@ public class InitialServlet extends HttpServlet {
                 while(rs3.next()){
                     rs6 = st7.executeQuery("select * from users where id="+rs3.getString(3));
                     while(rs6.next()){
-                        out.println("<input type ='radio' name ='addFriend' value ='"+rs6.getString(2)+"'>" + rs6.getString(2) + "<br>");
+                        out.println("<input type ='radio' name ='removeFriend' value ='"+rs6.getString(2)+"'>" + rs6.getString(2) + "<br>");
                     }
                 }   
                 out.println("<input type = 'submit' name =Submit' value='Unfollow'>");
