@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author himan
  */
-public class FriendsServlet extends HttpServlet {
+public class ProfileServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,8 +33,8 @@ public class FriendsServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     String uname, lname, friend = null;
-    Statement st1, st2, st3, st4, st5, st6, st7 = null;
-    ResultSet rs1, rs2, rs3, rs4, rs5, rs6 = null;
+    Statement st1, st2, st3, st4, st5, st6, st7, st8, st9 = null;
+    ResultSet rs1, rs2, rs3, rs4, rs5, rs6, rs8, rs9 = null;
     int id1, id2;
     PreparedStatement preparedStatement = null;
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -89,26 +89,43 @@ public class FriendsServlet extends HttpServlet {
                 
                 st2 = conn.createStatement();
                 rs2 = st2.executeQuery("select * from users where not firstName='"+uname+"' and not lastName='"+lname+"' and id not in (select friendTo from friends where friendFrom="+id1+")");
-                out.println("<form action = 'FriendsServlet'>");
+                out.println("<form action = 'ProfileServlet'>");
                 while(rs2.next()){
                     out.println("<input type = 'radio' name = 'addFriend' value = '"+rs2.getString(2)+"'>" + rs2.getString(2) + "<br>");
                 }
-                out.println("<input type = 'submit' name = 'AddFriend' value='Add Friend'>");
+                out.println("<input type = 'submit' name = 'AddFriend' value='Follow'>");
                 out.println("</form>");
                 // End add friend
           
-                // Show friends
-                out.println("<br>Friends<br>");
+                // Show following
+                out.println("<br>Following<br>");
                 st3 = conn.createStatement();
                 rs3 = st3.executeQuery("select * from friends where friendFrom="+id1+"");
                 st7 = conn.createStatement();
+                out.println("<form>");
                 while(rs3.next()){
                     rs6 = st7.executeQuery("select * from users where id="+rs3.getString(3));
                     while(rs6.next()){
-                        out.println(rs6.getString(2)+"<br>");
+                        out.println("<input type ='radio' name ='addFriend' value ='"+rs6.getString(2)+"'>" + rs6.getString(2) + "<br>");
                     }
-                }                      
-                // End friends
+                }   
+                out.println("<input type = 'submit' name =Submit' value='Unfollow'>");
+                out.println("</form>");
+                                 
+                // End following
+                
+                // Show followers
+                out.println("<br>Followers<br>");
+                st8 = conn.createStatement();
+                rs8 = st8.executeQuery("select * from friends where friendTo="+id1+"");
+                st9 = conn.createStatement();
+                while(rs8.next()){
+                    rs9 = st9.executeQuery("select * from users where id="+rs8.getString(2));
+                    while(rs9.next()){
+                        out.println(rs9.getString(2)+"<br>");
+                    }
+                }   
+                // End followers
             }catch(Exception e){
                 
             }
