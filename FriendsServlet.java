@@ -86,12 +86,12 @@ public class ProfileServlet extends HttpServlet {
                 // out.println("<br>Friend added");
                 // End of feed
                 
-                
+                // Add friend
                 st2 = conn.createStatement();
                 rs2 = st2.executeQuery("select * from users where not firstName='"+uname+"' and not lastName='"+lname+"' and id not in (select friendTo from friends where friendFrom="+id1+")");
                 out.println("<form action = 'ProfileServlet'>");
                 while(rs2.next()){
-                    out.println("<input type = 'radio' name = 'addFriend' value = '"+rs2.getString(2)+"'>" + rs2.getString(2) + "<br>");
+                    out.println("<input type = 'radio' name = 'removeFriend' value = '"+rs2.getString(2)+"'>" + rs2.getString(2) + "<br>");
                 }
                 out.println("<input type = 'submit' name = 'AddFriend' value='Follow'>");
                 out.println("</form>");
@@ -102,7 +102,7 @@ public class ProfileServlet extends HttpServlet {
                 st3 = conn.createStatement();
                 rs3 = st3.executeQuery("select * from friends where friendFrom="+id1+"");
                 st7 = conn.createStatement();
-                out.println("<form>");
+                out.println("<form action='FinalProfileServlet'>");
                 while(rs3.next()){
                     rs6 = st7.executeQuery("select * from users where id="+rs3.getString(3));
                     while(rs6.next()){
