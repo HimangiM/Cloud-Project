@@ -128,7 +128,9 @@ public class FinalProfileServlet extends HttpServlet {
                     }
                 }   
                 // End followers
-                
+                st8 = conn.createStatement();
+                rs8 = st8.executeUpdate("update friends where friendFrom"+id1+"friendTo"+id2);
+                // Here
                 // Exit
                 out.println("<form action='index.jsp'>");
                 out.println("<input type='submit' value='Exit' name='Exit'>");
